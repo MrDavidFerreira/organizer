@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     //*** Makes classes annotated with Spring annotations open ***/
     kotlin("plugin.spring") version kotlinVersion
-//    kotlin("plugin.jpa") kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
     /*** ¿¿¿ Spring dependencies ??? ***/
     id("org.springframework.boot") version "2.1.1.RELEASE"
     /*** Control the project's dependencies versions ***/
@@ -26,14 +26,18 @@ dependencies {
     /*** Kotlin reflection library (mandatory as of Spring Framework 5) ***/
     implementation(kotlin("reflect"))
     /*** Adds support for serialization/deserialization of Kotlin classes and data classes ***/
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit") //Exclude JUnit 4
     }
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.mockito:mockito-junit-jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+    runtimeOnly("mysql:mysql-connector-java:8.0.13")
 }
 
 tasks.withType<KotlinCompile> {

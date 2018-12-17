@@ -1,4 +1,4 @@
-package com.davfer.organizer
+package com.davfer.organizer.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
