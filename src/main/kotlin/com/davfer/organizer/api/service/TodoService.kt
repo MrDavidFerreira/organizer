@@ -6,6 +6,7 @@ import com.davfer.organizer.api.repository.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.util.*
 
 @Service("Todo service")
 class TodoService {
@@ -62,5 +63,9 @@ class TodoService {
         todo.modified = Instant.now()
         todo = repository.save(todo)
         return TodoDTO(todo)
+    }
+
+    fun getScheduledLaterThan(date: Date): Iterable<TodoDTO> {
+        return repository.findScheduledLaterThan(date.time).map { it -> TodoDTO(it) }
     }
 }

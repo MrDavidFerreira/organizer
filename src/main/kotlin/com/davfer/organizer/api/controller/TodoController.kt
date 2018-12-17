@@ -1,10 +1,13 @@
 package com.davfer.organizer.api.controller
 
+import com.davfer.organizer.api.data.NoteDTO
 import com.davfer.organizer.api.data.TodoDTO
 import com.davfer.organizer.api.service.TodoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import java.time.Instant
+import java.util.*
 
 @RestController
 @RequestMapping("/todos")
@@ -46,4 +49,14 @@ class TodoController {
     )
     fun updateTodo(@RequestBody todo: TodoDTO): TodoDTO = service.updateTodo(todo)
 
+    @PostMapping(
+        value = ["/later_than"],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun getTodosLaterThan(
+        @RequestBody payload: TodoLaterThanRequest
+    ): Iterable<TodoDTO> = service.getScheduledLaterThan(payload.date)
 }
+
+data class TodoLaterThanRequest(val date: Date)

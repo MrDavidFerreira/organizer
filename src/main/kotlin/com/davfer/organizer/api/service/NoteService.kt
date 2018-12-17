@@ -61,4 +61,8 @@ class NoteService {
         note = repository.save(note)
         return NoteDTO(note)
     }
+
+    fun findByTitle(title: String): Iterable<NoteDTO> {
+        return repository.findByTitle(title).map { it -> NoteDTO(it) }
+    }
 }

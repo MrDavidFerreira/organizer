@@ -47,4 +47,15 @@ class NoteController {
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun updateNote(@RequestBody note: NoteDTO): NoteDTO = service.updateNote(note)
+
+    @PostMapping(
+        value = ["/by_title"],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun getTodosLaterThan(
+        @RequestBody payload: NoteFindByTitleRequest
+    ): Iterable<NoteDTO> = service.findByTitle(payload.title)
 }
+
+data class NoteFindByTitleRequest(val title: String)
