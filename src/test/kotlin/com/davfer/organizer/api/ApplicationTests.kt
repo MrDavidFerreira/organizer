@@ -1,4 +1,4 @@
-package com.davfer.organizer
+package com.davfer.organizer.api
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

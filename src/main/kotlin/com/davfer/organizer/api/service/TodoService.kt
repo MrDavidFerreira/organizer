@@ -11,6 +11,7 @@ import java.util.*
 @Service("Todo service")
 class TodoService {
 
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     lateinit var repository: TodoRepository
 
@@ -66,6 +67,6 @@ class TodoService {
     }
 
     fun getScheduledLaterThan(date: Date): Iterable<TodoDTO> {
-        return repository.findScheduledLaterThan(date.time).map { it -> TodoDTO(it) }
+        return repository.findByScheduleGreaterThan(date.time).map { it -> TodoDTO(it) }
     }
 }

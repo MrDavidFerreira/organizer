@@ -10,6 +10,7 @@ import java.time.Instant
 @Service("Note service")
 class NoteService {
 
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     lateinit var repository: NoteRepository
 

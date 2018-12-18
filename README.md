@@ -11,3 +11,6 @@ REST application programming interface (API) for management of user Notes and TO
 
 ## Based on...
 * [Building applications with Spring 5 and Kotlin](https://www.packtpub.com/application-development/building-applications-spring-5-and-kotlin)
+
+### Helpful Links
+* [Hibernate with Kotlin – powered by Spring Boot](https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/)
