@@ -31,6 +31,7 @@ dependencies {
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit") //Exclude JUnit 4
     }
@@ -45,6 +46,9 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     runtimeOnly("mysql:mysql-connector-java:8.0.13")
+
+    implementation("io.projectreactor:reactor-bus:2.0.8.RELEASE")
+    implementation("io.projectreactor:reactor-core:2.0.8.RELEASE")
 }
 
 allOpen {

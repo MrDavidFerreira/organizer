@@ -2,9 +2,12 @@ package com.davfer.organizer.api.service
 
 import com.davfer.organizer.api.data.Todo
 import com.davfer.organizer.api.data.TodoDTO
+import com.davfer.organizer.api.reactor.TodosCountNotification
 import com.davfer.organizer.api.repository.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import reactor.bus.Event
+import reactor.bus.EventBus
 import java.time.Instant
 import java.util.*
 
@@ -14,6 +17,10 @@ class TodoService {
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     lateinit var repository: TodoRepository
+
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private lateinit var eventBus: EventBus
 
     /**
      * Returns all instances of the type.
@@ -29,16 +36,25 @@ class TodoService {
      * @param todoDTO must not be {@literal null}.
      * @return the saved entity will never be {@literal null}.
      */
-    fun insertTodo(todoDTO: TodoDTO): TodoDTO = TodoDTO(
-        repository.save(
-            Todo(
-                title = todoDTO.title,
-                message = todoDTO.message,
-                location = todoDTO.location,
-                schedule = todoDTO.schedule
+    fun insertTodo(todo: TodoDTO): TodoDTO {
+        val result = TodoDTO(
+            repository.save(
+                Todo(
+                    title = todo.title,
+                    message = todo.message,
+                    location = todo.location,
+                    schedule = todo.schedule
+
+                )
             )
         )
-    )
+        val count = getTodos().count()
+        if (count > 10) {
+            val notification = TodosCountNotification(count)
+            eventBus.notify("todosCountNotificationConsumer", Event.wrap(notification))
+        }
+        return result
+    }
 
     /**
      * Deletes the entity with the given id.

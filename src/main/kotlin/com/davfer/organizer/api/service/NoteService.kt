@@ -2,9 +2,12 @@ package com.davfer.organizer.api.service
 
 import com.davfer.organizer.api.data.Note
 import com.davfer.organizer.api.data.NoteDTO
+import com.davfer.organizer.api.reactor.NotesCountNotification
 import com.davfer.organizer.api.repository.NoteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import reactor.bus.Event
+import reactor.bus.EventBus
 import java.time.Instant
 
 @Service("Note service")
@@ -13,6 +16,10 @@ class NoteService {
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     lateinit var repository: NoteRepository
+
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private lateinit var eventBus: EventBus
 
     /**
      * Returns all instances of the type.
@@ -28,15 +35,23 @@ class NoteService {
      * @param noteDTO must not be {@literal null}.
      * @return the saved entity will never be {@literal null}.
      */
-    fun insertNote(noteDTO: NoteDTO): NoteDTO = NoteDTO(
-        repository.save(
-            Note(
-                title = noteDTO.title,
-                message = noteDTO.message,
-                location = noteDTO.location
+    fun insertNote(note: NoteDTO): NoteDTO {
+        val result = NoteDTO(
+            repository.save(
+                Note(
+                    title = note.title,
+                    message = note.message,
+                    location = note.location
+                )
             )
         )
-    )
+        val count = getNotes().count()
+        if (count > 10) {
+            val notification = NotesCountNotification(count)
+            eventBus.notify("notesCountNotificationConsumer", Event.wrap(notification))
+        }
+        return result
+    }
 
     /**
      * Deletes the entity with the given id.
